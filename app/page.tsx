@@ -74,7 +74,7 @@ export default function Home() {
       detailSecondaryText: "text-zinc-300",
     },
     light: {
-      pageBg: "bg-white",
+      pageBg: "bg-gradient-to-br from-zinc-50 via-zinc-50 to-zinc-100",
       pageText: "text-zinc-900",
       titleText: "text-zinc-900",
       bodyText: "text-zinc-600",
