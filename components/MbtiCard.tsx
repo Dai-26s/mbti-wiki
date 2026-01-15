@@ -91,11 +91,11 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
       onClick={onClick}
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`group relative flex h-full flex-col justify-between rounded-[2rem] border bg-clip-padding p-6 text-left shadow-xl backdrop-blur-2xl transition ${cardStyle} hover:brightness-110`}
+      className={`group relative flex h-full flex-col justify-between rounded-[2rem] border bg-clip-padding p-6 text-left shadow-xl backdrop-blur-2xl transition ${cardStyle} hover:brightness-110 overflow-hidden`}
     >
       <div className="space-y-4">
         <div className="flex items-start justify-between">
-          <div className="flex flex-col">
+          <div className="relative z-10 flex flex-col pr-20 md:pr-24">
             <h3
               className={`font-serif text-3xl font-semibold tracking-tight text-transparent ${codeGradient} bg-clip-text`}
             >
@@ -109,8 +109,8 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
             </p>
           </div>
         </div>
-        <div className="pointer-events-none absolute right-4 top-4 select-none text-6xl md:text-7xl">
-          <span className="drop-shadow-lg">{emoji}</span>
+        <div className="pointer-events-none absolute right-4 top-4 select-none z-0">
+          <span className="block leading-none drop-shadow-lg text-[clamp(40px,6vw,72px)]">{emoji}</span>
         </div>
       </div>
       <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-4 text-xs">
