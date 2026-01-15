@@ -20,19 +20,18 @@ const getAvatarEmoji = (code: string) => {
 };
 
 export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
-  const avatarBg =
-    theme === "aurora"
-      ? "bg-gradient-to-br from-sky-500 via-emerald-400 to-cyan-400"
-      : theme === "sunset"
-        ? "bg-gradient-to-br from-rose-500 via-orange-400 to-amber-300"
-        : "bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-700";
-
   const accentDot =
     theme === "aurora"
       ? "bg-gradient-to-tr from-sky-400 to-emerald-400"
       : theme === "sunset"
         ? "bg-gradient-to-tr from-rose-400 to-amber-300"
         : "bg-zinc-200";
+ 
+  const emoji = getAvatarEmoji(profile.code);
+  const reps =
+    profile.representatives && profile.representatives.length > 0
+      ? profile.representatives.slice(0, 3).join("、")
+      : "";
 
   return (
     <motion.button
@@ -40,33 +39,26 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
       onClick={onClick}
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="group flex h-full flex-col justify-between rounded-[2rem] border border-white/10 bg-white/5 bg-clip-padding p-6 text-left shadow-xl backdrop-blur-2xl transition hover:border-white/20 hover:bg-white/10"
+      className="group relative flex h-full flex-col justify-between rounded-[2rem] border border-white/10 bg-white/5 bg-clip-padding p-6 text-left shadow-xl backdrop-blur-2xl transition hover:border-white/20 hover:bg-white/10"
     >
-      <div className="space-y-5">
+      <div className="space-y-4">
         <div className="flex items-start justify-between">
-            <div className={`flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg ${avatarBg} text-3xl`}>
-                {getAvatarEmoji(profile.code)}
-            </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[10px] font-medium tracking-wider text-zinc-400 ring-1 ring-white/10">
-              <span className={`h-1.5 w-1.5 rounded-full ${accentDot}`} />
-              MBTI
-            </div>
-        </div>
-        
-        <div>
-            <h3 className="font-serif text-3xl font-bold tracking-tight text-white/90">
-                {profile.code}
+          <div className="flex flex-col">
+            <h3 className="font-serif text-3xl font-semibold tracking-tight text-zinc-50">
+              {profile.code}
             </h3>
-            <p className="mt-1 text-sm font-medium text-zinc-400">
-                {profile.name}
+            <p className="mt-1 text-sm font-medium text-zinc-300">
+              {profile.name}
             </p>
+            <p className="mt-1 text-xs text-emerald-300">
+              {reps}
+            </p>
+          </div>
         </div>
-
-        <p className="line-clamp-3 text-xs leading-relaxed text-zinc-400/80">
-          {profile.description}
-        </p>
+        <div className="pointer-events-none absolute right-4 top-4 select-none text-6xl md:text-7xl">
+          <span className="drop-shadow-lg">{emoji}</span>
+        </div>
       </div>
-      
       <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-4 text-xs">
         <span className="flex items-center gap-2 text-zinc-300">
           <span className={`inline-flex h-1.5 w-1.5 rounded-full ${accentDot} group-hover:scale-125 transition-transform`} />
