@@ -29,6 +29,25 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
 
   const temperamentKey = `${profile.code[1]}${profile.code[2]}`;
 
+  const codeTintMap: Record<string, string> = {
+    INTJ: "bg-indigo-300/20",
+    INTP: "bg-sky-300/20",
+    ENTJ: "bg-amber-300/20",
+    ENTP: "bg-cyan-300/20",
+    INFJ: "bg-violet-300/20",
+    INFP: "bg-rose-300/20",
+    ENFJ: "bg-fuchsia-300/20",
+    ENFP: "bg-orange-300/20",
+    ISTJ: "bg-emerald-300/20",
+    ISFJ: "bg-teal-300/20",
+    ESTJ: "bg-blue-300/20",
+    ESFJ: "bg-pink-300/20",
+    ISTP: "bg-slate-300/20",
+    ISFP: "bg-lime-300/20",
+    ESTP: "bg-cyan-300/20",
+    ESFP: "bg-amber-300/20",
+  };
+
   const cardStyle =
     theme === "aurora"
       ? temperamentKey === "NT"
@@ -64,9 +83,11 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
         : "text-violet-200/80";
  
   const emoji = getAvatarEmoji(profile.code);
+  const cleanRep = (t: string) =>
+    t.replace(/^(虚构：|文化：)/, "").replace(/（[^）]*）/g, "").trim();
   const reps =
     profile.representatives && profile.representatives.length > 0
-      ? profile.representatives.slice(0, 3).join("、")
+      ? profile.representatives.slice(0, 3).map(cleanRep).join("、")
       : "";
 
   return (
@@ -77,6 +98,7 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
       whileTap={{ scale: 0.98 }}
       className={`group relative flex h-full flex-col justify-between rounded-[2rem] border bg-clip-padding p-6 md:p-7 text-left shadow-xl backdrop-blur-2xl transition ${cardStyle} hover:brightness-110 hover:shadow-2xl hover:ring-1 hover:ring-white/30 overflow-hidden`}
     >
+      <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl ${codeTintMap[profile.code]} opacity-30`} />
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <div className="relative z-10 flex flex-col pr-20 md:pr-24">

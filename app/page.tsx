@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import MbtiCard from "../components/MbtiCard";
@@ -16,6 +16,7 @@ export default function Home() {
     null,
   );
   const [theme, setTheme] = useState<AppTheme>("aurora");
+  const [activeLetters, setActiveLetters] = useState<string[]>([]);
 
   const themeConfig: Record<
     AppTheme,
@@ -52,6 +53,49 @@ export default function Home() {
 
   const styles = themeConfig[theme];
 
+  const letterFilters = [
+    "I",
+    "E",
+    "N",
+    "S",
+    "T",
+    "F",
+    "J",
+    "P",
+  ];
+
+  const orderedProfiles = useMemo(() => {
+    const orderEI = ["I", "E"];
+    const orderSN = ["N", "S"];
+    const orderTF = ["T", "F"];
+    const orderJP = ["J", "P"];
+
+    const score = (code: string) => {
+      const [e, s, t, j] = code.split("");
+      return [
+        orderEI.indexOf(e),
+        orderSN.indexOf(s),
+        orderTF.indexOf(t),
+        orderJP.indexOf(j),
+      ];
+    };
+
+    let list = [...mbtiProfiles];
+    list.sort((a, b) => {
+      const sa = score(a.code);
+      const sb = score(b.code);
+      for (let i = 0; i < sa.length; i += 1) {
+        if (sa[i] !== sb[i]) return sa[i] - sb[i];
+      }
+      return 0;
+    });
+
+    if (activeLetters.length === 0) return list;
+    return list.filter((profile) =>
+      activeLetters.every((ch) => profile.code.includes(ch)),
+    );
+  }, [activeLetters]);
+
   const handleOpen = (profile: MbtiProfile) => {
     setSelectedProfile(profile);
   };
@@ -79,12 +123,24 @@ export default function Home() {
     return map[code] || "🧩";
   };
 
-  const avatarBg =
-    theme === "aurora"
-      ? "bg-gradient-to-br from-sky-500 via-emerald-400 to-cyan-400"
-      : theme === "sunset"
-        ? "bg-gradient-to-br from-rose-500 via-orange-400 to-amber-300"
-        : "bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-700";
+  const detailSurface: Record<string, { avatar: string }> = {
+    INTJ: { avatar: "bg-gradient-to-br from-slate-900 via-indigo-900/70 to-slate-800" },
+    INTP: { avatar: "bg-gradient-to-br from-slate-900 via-sky-900/60 to-slate-800" },
+    ENTJ: { avatar: "bg-gradient-to-br from-slate-900 via-amber-900/60 to-slate-800" },
+    ENTP: { avatar: "bg-gradient-to-br from-slate-900 via-emerald-900/60 to-slate-800" },
+    INFJ: { avatar: "bg-gradient-to-br from-slate-900 via-violet-900/60 to-slate-800" },
+    INFP: { avatar: "bg-gradient-to-br from-slate-900 via-rose-900/60 to-slate-800" },
+    ENFJ: { avatar: "bg-gradient-to-br from-slate-900 via-fuchsia-900/60 to-slate-800" },
+    ENFP: { avatar: "bg-gradient-to-br from-slate-900 via-orange-900/60 to-slate-800" },
+    ISTJ: { avatar: "bg-gradient-to-br from-slate-900 via-emerald-900/60 to-slate-800" },
+    ISFJ: { avatar: "bg-gradient-to-br from-slate-900 via-teal-900/60 to-slate-800" },
+    ESTJ: { avatar: "bg-gradient-to-br from-slate-900 via-blue-900/60 to-slate-800" },
+    ESFJ: { avatar: "bg-gradient-to-br from-slate-900 via-pink-900/60 to-slate-800" },
+    ISTP: { avatar: "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700" },
+    ISFP: { avatar: "bg-gradient-to-br from-slate-900 via-lime-900/40 to-slate-800" },
+    ESTP: { avatar: "bg-gradient-to-br from-slate-900 via-cyan-900/60 to-slate-800" },
+    ESFP: { avatar: "bg-gradient-to-br from-slate-900 via-amber-900/60 to-slate-800" },
+  };
 
   return (
     <div className={`min-h-screen ${styles.pageBg} text-zinc-50`}>
@@ -126,11 +182,48 @@ export default function Home() {
                         点击右侧卡片，查看每一种人格的核心特质、典型习惯、代表人物与成长建议。
                       </p>
                     </div>
+                    <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-zinc-300 sm:justify-end">
+                      <span className="mr-1 text-zinc-400">
+                        筛选倾向：
+                      </span>
+                      {letterFilters.map((letter) => {
+                        const active = activeLetters.includes(letter);
+                        return (
+                          <button
+                            key={letter}
+                            type="button"
+                            onClick={() =>
+                              setActiveLetters((prev) =>
+                                prev.includes(letter)
+                                  ? prev.filter((l) => l !== letter)
+                                  : [...prev, letter],
+                              )
+                            }
+                            className={`rounded-full px-2.5 py-1 transition ${
+                              active
+                                ? "bg-white/20 text-zinc-50"
+                                : "bg-white/5 text-zinc-300 hover:bg-white/10"
+                            }`}
+                          >
+                            {letter}
+                          </button>
+                        );
+                      })}
+                      {activeLetters.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setActiveLetters([])}
+                          className="rounded-full px-2 py-1 text-[10px] text-zinc-400 underline-offset-2 hover:text-zinc-200 hover:underline"
+                        >
+                          重置
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </header>
                 <section className="mt-4">
                   <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:gap-8">
-                    {mbtiProfiles.map((profile) => (
+                    {orderedProfiles.map((profile) => (
                       <MbtiCard
                         key={profile.code}
                         profile={profile}
@@ -256,7 +349,7 @@ export default function Home() {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${avatarBg} text-3xl shadow-lg`}>
+                  <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${detailSurface[selectedProfile.code]?.avatar ?? "bg-slate-800"} text-3xl shadow-lg`}>
                     <span>{getAvatarEmoji(selectedProfile.code)}</span>
                   </div>
                   <div className="space-y-1">
