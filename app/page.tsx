@@ -10,7 +10,7 @@ import Quiz from "../components/Quiz";
 type AppTheme = "aurora" | "sunset" | "mono";
 
 export default function Home() {
-  const [view, setView] = useState<"gallery" | "quiz">("gallery");
+  const [currentView, setCurrentView] = useState<"gallery" | "quiz">("gallery");
   const [selectedProfile, setSelectedProfile] = useState<MbtiProfile | null>(
     null,
   );
@@ -61,7 +61,7 @@ export default function Home() {
       return;
     }
     setSelectedProfile(profile);
-    setView("gallery");
+    setCurrentView("gallery");
   };
 
   const handleClose = () => {
@@ -73,14 +73,14 @@ export default function Home() {
       <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 md:gap-10 md:px-8 md:py-10 lg:py-12">
         <div className="sticky top-6 hidden h-[calc(100vh-3rem)] w-72 shrink-0 md:block">
           <Sidebar
-            activeView={view}
-            onChangeView={setView}
+            activeView={currentView}
+            onChangeView={setCurrentView}
             theme={theme}
             onChangeTheme={setTheme}
           />
         </div>
         <main className="flex flex-1 flex-col gap-6">
-          {view === "gallery" && (
+          {currentView === "gallery" && (
             <>
               <header className="space-y-3">
                 <div
@@ -116,15 +116,44 @@ export default function Home() {
               </section>
             </>
           )}
-          {view === "quiz" && (
+          {currentView === "quiz" && (
             <section className="mt-2">
               <Quiz
                 onViewDetail={handleViewDetailFromQuiz}
-                onBackToGallery={() => setView("gallery")}
+                onBackToGallery={() => setCurrentView("gallery")}
               />
             </section>
           )}
         </main>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-black/40 px-4 py-3 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setCurrentView("gallery")}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-2xl px-3 py-2 text-sm transition ${
+              currentView === "gallery"
+                ? "bg-white/10 text-zinc-50 ring-1 ring-white/20"
+                : "bg-white/5 text-zinc-300 ring-1 ring-white/10 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-tr from-sky-400 to-emerald-400" />
+            <span>人格图鉴</span>
+          </button>
+          <div className="w-3" />
+          <button
+            type="button"
+            onClick={() => setCurrentView("quiz")}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-2xl px-3 py-2 text-sm transition ${
+              currentView === "quiz"
+                ? "bg-white/10 text-zinc-50 ring-1 ring-white/20"
+                : "bg-white/5 text-zinc-300 ring-1 ring-white/10 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span>人格测评</span>
+          </button>
+        </div>
       </div>
       <AnimatePresence>
         {selectedProfile && (
