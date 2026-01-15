@@ -188,6 +188,28 @@ export default function Quiz({ onViewDetail, onBackToGallery, theme }: QuizProps
 
   const isLight = theme === "light";
 
+  const normalizeStem = (q: Question) => {
+    let t = (q.text || "").trim();
+    t = t.replace(/[？?]\s*$/u, ""); // remove ending question mark
+    // convert "你会…还是…" structure to single-sided statement favoring the first clause
+    if (t.includes("还是")) {
+      const parts = t.split("还是");
+      const first = parts[0].trim();
+      // strengthen as declarative
+      let stmt = first;
+      stmt = stmt.replace(/^你会是那个/u, "你更倾向于");
+      stmt = stmt.replace(/^你会先/u, "你通常会先");
+      stmt = stmt.replace(/^你会/u, "你通常会");
+      stmt = stmt.replace(/，$/u, "");
+      return stmt;
+    }
+    // normalize common interrogative endings
+    t = t.replace(/吗$/u, "");
+    t = t.replace(/^你会/u, "你通常会");
+    t = t.replace(/^你是否/u, "你通常会");
+    return t;
+  };
+
   // Selection Screen
   if (quizMode === "selection") {
     return (
@@ -405,14 +427,14 @@ export default function Quiz({ onViewDetail, onBackToGallery, theme }: QuizProps
                         isLight ? "text-zinc-900" : "text-zinc-50"
                       }`}
                     >
-                      {currentQuestion.text}
+                  {normalizeStem(currentQuestion)}
                     </h2>
                     <p
                       className={`text-xs ${
                         isLight ? "text-zinc-700" : "text-zinc-400"
                       }`}
                     >
-                      请根据你在大多数场景中的真实反应作答，而不是理想中的自己。
+                  请对上述陈述的同意程度作答，并根据你的真实反应选择。
                     </p>
                   </div>
                   <div className="mt-8 space-y-4">
