@@ -113,6 +113,18 @@ export default function Sidebar({
           <div className="flex gap-2">
             <button
               type="button"
+              onClick={() => onChangeTheme("light")}
+              className={`flex flex-1 items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] transition ${
+                theme === "light"
+                  ? "border-zinc-900 bg-zinc-900 text-zinc-50"
+                  : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+              }`}
+            >
+              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-white to-zinc-200" />
+              <span>明亮</span>
+            </button>
+            <button
+              type="button"
               onClick={() => onChangeTheme("aurora")}
               className={`flex flex-1 items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] transition ${
                 theme === "aurora"

@@ -4,6 +4,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import RadarChart from "./RadarChart";
+import QuestionIllustration from "./QuestionIllustration";
 import { mbtiProfiles, type MbtiProfile } from "../data/mbti";
 import { quickQuestions, fullQuestions, type Question } from "../data/quiz-data";
 
@@ -387,77 +388,87 @@ export default function Quiz({ onViewDetail, onBackToGallery, theme }: QuizProps
               exit={{ x: direction > 0 ? -40 : 40, opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 30 }}
             >
-              <div className="space-y-3">
-                <div
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.16em] ring-1 ${
-                    isLight
-                      ? "bg-zinc-100 text-zinc-800 ring-zinc-200"
-                      : "bg-white/5 text-zinc-300 ring-white/10"
-                  }`}
-                >
-                  Q{currentIndex + 1}
-                </div>
-                <h2
-                  className={`text-base font-medium leading-relaxed sm:text-lg ${
-                    isLight ? "text-zinc-900" : "text-zinc-50"
-                  }`}
-                >
-                  {currentQuestion.text}
-                </h2>
-                <p
-                  className={`text-xs ${
-                    isLight ? "text-zinc-700" : "text-zinc-400"
-                  }`}
-                >
-                  请根据你在大多数场景中的真实反应作答，而不是理想中的自己。
-                </p>
-              </div>
-              <div className="mt-8 space-y-4">
-                <div className="grid gap-2 sm:grid-cols-5">
-                  {scaleOptions.map((option) => {
-                    const selected = answers[currentIndex] === option.value;
-                    return (
+              <div className="md:grid md:grid-cols-12 md:gap-8">
+                <div className="md:col-span-7">
+                  <div className="space-y-3">
+                    <div
+                      className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.16em] ring-1 ${
+                        isLight
+                          ? "bg-zinc-100 text-zinc-800 ring-zinc-200"
+                          : "bg-white/5 text-zinc-300 ring-white/10"
+                      }`}
+                    >
+                      Q{currentIndex + 1}
+                    </div>
+                    <h2
+                      className={`text-base font-normal tracking-[0.01em] leading-relaxed sm:text-lg ${
+                        isLight ? "text-zinc-900" : "text-zinc-50"
+                      }`}
+                    >
+                      {currentQuestion.text}
+                    </h2>
+                    <p
+                      className={`text-xs ${
+                        isLight ? "text-zinc-700" : "text-zinc-400"
+                      }`}
+                    >
+                      请根据你在大多数场景中的真实反应作答，而不是理想中的自己。
+                    </p>
+                  </div>
+                  <div className="mt-8 space-y-4">
+                    <div className="grid gap-2 sm:grid-cols-5">
+                      {scaleOptions.map((option) => {
+                        const selected = answers[currentIndex] === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            onClick={() => handleSelect(option.value)}
+                            className={`flex items-center justify-center rounded-2xl px-3 py-3 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/80 ${
+                              selected
+                                ? "bg-gradient-to-br from-sky-500 to-emerald-400 text-zinc-50 shadow-lg shadow-sky-900/40"
+                                : isLight
+                                  ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200"
+                                  : "bg-white/5 text-zinc-200 hover:bg-white/10"
+                            }`}
+                          >
+                            {option.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="flex items-center justify-between">
                       <button
-                        key={option.value}
                         type="button"
-                        onClick={() => handleSelect(option.value)}
-                        className={`flex items-center justify-center rounded-2xl px-3 py-3 text-xs font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/80 ${
-                          selected
-                            ? "bg-gradient-to-br from-sky-500 to-emerald-400 text-zinc-50 shadow-lg shadow-sky-900/40"
+                        onClick={handlePrev}
+                        disabled={currentIndex === 0}
+                        className={`inline-flex items-center rounded-full border px-3 py-1.5 text-[11px] font-medium transition ${
+                          currentIndex === 0
+                            ? isLight
+                              ? "cursor-not-allowed border-zinc-200 bg-transparent text-zinc-500"
+                              : "cursor-not-allowed border-white/10 bg-white/0 text-zinc-500"
                             : isLight
-                              ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200"
-                              : "bg-white/5 text-zinc-200 hover:bg-white/10"
+                              ? "border-zinc-200 bg-zinc-50 text-zinc-800 hover:bg-zinc-100"
+                              : "border-white/20 bg-white/5 text-zinc-200 hover:bg-white/10 hover:text-white"
                         }`}
                       >
-                        {option.label}
+                        上一题
                       </button>
-                    );
-                  })}
-                </div>
-                <div className="flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={handlePrev}
-                    disabled={currentIndex === 0}
-                    className={`inline-flex items-center rounded-full border px-3 py-1.5 text-[11px] font-medium transition ${
-                      currentIndex === 0
-                        ? isLight
-                          ? "cursor-not-allowed border-zinc-200 bg-transparent text-zinc-500"
-                          : "cursor-not-allowed border-white/10 bg-white/0 text-zinc-500"
-                        : isLight
-                          ? "border-zinc-200 bg-zinc-50 text-zinc-800 hover:bg-zinc-100"
-                          : "border-white/20 bg-white/5 text-zinc-200 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    上一题
-                  </button>
-                  <div
-                    className={`text-[11px] ${
-                      isLight ? "text-zinc-700" : "text-zinc-500"
-                    }`}
-                  >
-                    已选择的选项会保留，可随时返回修改
+                      <div
+                        className={`text-[11px] ${
+                          isLight ? "text-zinc-700" : "text-zinc-500"
+                        }`}
+                      >
+                        已选择的选项会保留，可随时返回修改
+                      </div>
+                    </div>
                   </div>
+                </div>
+                <div className="mt-10 md:mt-0 md:col-span-5">
+                  <QuestionIllustration
+                    question={currentQuestion}
+                    theme={theme}
+                  />
                 </div>
               </div>
             </motion.div>
