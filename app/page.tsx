@@ -129,7 +129,7 @@ export default function Home() {
                   </div>
                 </header>
                 <section className="mt-4">
-                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:gap-6">
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:gap-8">
                     {mbtiProfiles.map((profile) => (
                       <MbtiCard
                         key={profile.code}
