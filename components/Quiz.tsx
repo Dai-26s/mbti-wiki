@@ -3,6 +3,7 @@
 
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import RadarChart from "./RadarChart";
 import { mbtiProfiles, type MbtiProfile } from "../data/mbti";
 import { quickQuestions, fullQuestions, type Question } from "../data/quiz-data";
 
@@ -212,7 +213,7 @@ export default function Quiz({ onViewDetail, onBackToGallery }: QuizProps) {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-zinc-100 group-hover:text-white">快速测评</h3>
-                <p className="mt-1 text-sm text-zinc-400">20 道精选题 · 约 3 分钟</p>
+                <p className="mt-1 text-sm text-zinc-400">30 道精选题 · 约 3 分钟</p>
               </div>
               <p className="text-xs leading-relaxed text-zinc-500 group-hover:text-zinc-400">
                 覆盖四个核心维度的简易版测试，适合快速了解自己的人格大概倾向。
@@ -345,81 +346,92 @@ export default function Quiz({ onViewDetail, onBackToGallery }: QuizProps) {
               exit={{ opacity: 0, y: -40 }}
               transition={{ type: "spring", stiffness: 260, damping: 30 }}
             >
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200 ring-1 ring-emerald-400/40">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  测评完成
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-                      {result.code}
-                    </span>
-                    <span className="text-xs text-zinc-400">
-                      你当前更接近的 MBTI 人格倾向
-                    </span>
-                  </div>
-                  {(() => {
-                    const { summary, profile } = getProfileSummary(result.code);
-                    return (
-                      <>
-                        {summary && (
-                          <p className="text-xs leading-relaxed text-zinc-200">
-                            {summary}
-                          </p>
-                        )}
-                        {profile?.representatives && (
-                          <div className="mt-2 space-y-1">
-                            <p className="text-xs font-medium text-zinc-400">代表人物：</p>
-                            <div className="flex flex-wrap gap-2">
-                                {profile.representatives.map(rep => (
-                                    <span key={rep} className="inline-flex items-center rounded-md bg-white/5 px-2 py-1 text-[10px] text-zinc-300 ring-1 ring-white/10">
-                                        {rep}
-                                    </span>
-                                ))}
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    );
-                  })()}
-                </div>
-                <div className="mt-4 grid gap-3 text-xs text-zinc-300 sm:grid-cols-2">
-                  {[
-                    { key: "EI", left: "外向 (E)", right: "内向 (I)" },
-                    { key: "SN", left: "实感 (S)", right: "直觉 (N)" },
-                    { key: "TF", left: "思考 (T)", right: "情感 (F)" },
-                    { key: "JP", left: "判断 (J)", right: "知觉 (P)" },
-                  ].map((dim) => {
-                     const pct = result.percentages[dim.key as keyof typeof result.percentages];
-                     return (
-                        <div key={dim.key} className="rounded-2xl bg-black/30 p-3 ring-1 ring-white/5">
-                            <div className="flex items-center justify-between text-[10px] text-zinc-400">
-                                <span>{dim.left}</span>
-                                <span>{dim.right}</span>
-                            </div>
-                            <div className="mt-1.5 flex items-center justify-between text-xs font-medium text-zinc-200">
-                                <span>{pct}%</span>
-                                <span>{100 - pct}%</span>
-                            </div>
-                            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
-                            <div
-                                className="h-full rounded-full bg-gradient-to-r from-sky-400 to-emerald-400"
-                                style={{ width: `${pct}%` }}
-                            />
-                            </div>
+              {/* Result Card */}
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/10 to-white/5 p-6 shadow-2xl ring-1 ring-white/10 sm:p-8">
+                {/* Decorative Background */}
+                <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-sky-500/20 blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
+                
+                <div className="relative flex flex-col gap-8 md:flex-row md:items-center md:gap-12">
+                   {/* Left: Info */}
+                   <div className="flex-1 space-y-6">
+                      <div className="space-y-3">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-400/30">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          测评完成
                         </div>
-                     );
-                  })}
+                        <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
+                          {result.code}
+                        </h1>
+                        {(() => {
+                           const { summary, profile } = getProfileSummary(result.code);
+                           return (
+                             <div className="space-y-4">
+                               <h2 className="text-xl font-medium text-zinc-200">
+                                 {profile?.name || "未知类型"}
+                               </h2>
+                               {profile?.strengths && (
+                                 <div className="flex flex-wrap gap-2">
+                                   {profile.strengths.slice(0, 3).map(s => (
+                                     <span key={s} className="rounded-md bg-white/5 px-2.5 py-1 text-[11px] text-zinc-300 ring-1 ring-white/10">
+                                       {s}
+                                     </span>
+                                   ))}
+                                 </div>
+                               )}
+                               <p className="text-sm leading-relaxed text-zinc-300/90">
+                                 {summary}
+                               </p>
+                             </div>
+                           );
+                        })()}
+                      </div>
+                      
+                      {/* Share Hint */}
+                      <div className="flex items-center gap-4 text-xs text-zinc-500">
+                        <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>截图分享结果</span>
+                        </div>
+                        <div className="h-3 w-px bg-white/10" />
+                        <span>长按保存卡片</span>
+                      </div>
+                   </div>
+
+                   {/* Right: Radar Chart */}
+                   <div className="flex flex-col items-center justify-center py-4 md:py-0">
+                      <div className="relative">
+                        <RadarChart 
+                            data={result.percentages} 
+                            size={240} 
+                            className="text-zinc-200"
+                        />
+                      </div>
+                   </div>
                 </div>
               </div>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+
+              {/* Actions */}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={onBackToGallery}
+                  className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white"
+                >
+                  返回图鉴
+                </button>
                 <button
                   type="button"
                   onClick={handleViewDetail}
-                  className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-sky-500 to-emerald-400 px-5 py-3 text-sm font-medium text-zinc-50 shadow-lg shadow-emerald-500/40 transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/80"
+                  className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-sky-500 to-emerald-400 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-emerald-500/30 transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/80"
                 >
-                  查看详细解析
+                  查看完整解析
+                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </button>
               </div>
             </motion.div>

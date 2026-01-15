@@ -68,6 +68,23 @@ export default function Home() {
     setSelectedProfile(null);
   };
 
+  const getAvatarEmoji = (code: string) => {
+    const map: Record<string, string> = {
+      INTJ: "📐", INTP: "🧪", ENTJ: "🎬", ENTP: "🗣️",
+      INFJ: "🕯️", INFP: "🍃", ENFJ: "⚔️", ENFP: "🎉",
+      ISTJ: "📋", ISFJ: "🛡️", ESTJ: "⚖️", ESFJ: "🤝",
+      ISTP: "🔧", ISFP: "🎨", ESTP: "🚀", ESFP: "🎤",
+    };
+    return map[code] || "🧩";
+  };
+
+  const avatarBg =
+    theme === "aurora"
+      ? "bg-gradient-to-br from-sky-500 via-emerald-400 to-cyan-400"
+      : theme === "sunset"
+        ? "bg-gradient-to-br from-rose-500 via-orange-400 to-amber-300"
+        : "bg-gradient-to-br from-zinc-100 via-zinc-400 to-zinc-700";
+
   return (
     <div className={`min-h-screen ${styles.pageBg} text-zinc-50`}>
       <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 md:gap-10 md:px-8 md:py-10 lg:py-12">
@@ -79,51 +96,66 @@ export default function Home() {
             onChangeTheme={setTheme}
           />
         </div>
-        <main className="flex flex-1 flex-col gap-6">
-          {currentView === "gallery" && (
-            <>
-              <header className="space-y-3">
-                <div
-                  className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ${styles.pillBg} ${styles.pillRing}`}
-                >
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full ${styles.accentDot}`}
-                  />
-                  MBTI 人格图鉴
-                </div>
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <h1 className="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
-                      认识 16 种人格，找到更适合自己的路
-                    </h1>
-                    <p className="mt-2 max-w-xl text-sm text-zinc-300">
-                      点击右侧卡片，查看每一种人格的核心特质、典型习惯、代表人物与成长建议。
-                    </p>
-                  </div>
-                </div>
-              </header>
-              <section className="mt-4">
-                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:gap-6">
-                  {mbtiProfiles.map((profile) => (
-                    <MbtiCard
-                      key={profile.code}
-                      profile={profile}
-                      onClick={() => handleOpen(profile)}
-                      theme={theme}
+        <main className="flex flex-1 flex-col gap-6 overflow-hidden">
+          <AnimatePresence mode="wait">
+            {currentView === "gallery" ? (
+              <motion.div
+                key="gallery"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-col gap-6"
+              >
+                <header className="space-y-3">
+                  <div
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ${styles.pillBg} ${styles.pillRing}`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${styles.accentDot}`}
                     />
-                  ))}
-                </div>
-              </section>
-            </>
-          )}
-          {currentView === "quiz" && (
-            <section className="mt-2">
-              <Quiz
-                onViewDetail={handleViewDetailFromQuiz}
-                onBackToGallery={() => setCurrentView("gallery")}
-              />
-            </section>
-          )}
+                    MBTI 人格图鉴
+                  </div>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h1 className="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
+                        认识 16 种人格，找到更适合自己的路
+                      </h1>
+                      <p className="mt-2 max-w-xl text-sm text-zinc-300">
+                        点击右侧卡片，查看每一种人格的核心特质、典型习惯、代表人物与成长建议。
+                      </p>
+                    </div>
+                  </div>
+                </header>
+                <section className="mt-4">
+                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:gap-6">
+                    {mbtiProfiles.map((profile) => (
+                      <MbtiCard
+                        key={profile.code}
+                        profile={profile}
+                        onClick={() => handleOpen(profile)}
+                        theme={theme}
+                      />
+                    ))}
+                  </div>
+                </section>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="quiz"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="mt-2 h-full"
+              >
+                <Quiz
+                  onViewDetail={handleViewDetailFromQuiz}
+                  onBackToGallery={() => setCurrentView("gallery")}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-black/40 px-4 py-3 backdrop-blur md:hidden">
@@ -175,23 +207,23 @@ export default function Home() {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 via-emerald-400 to-cyan-400 text-sm font-semibold text-zinc-950 shadow-lg">
-                    <span>{selectedProfile.code}</span>
+                  <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${avatarBg} text-3xl shadow-lg`}>
+                    <span>{getAvatarEmoji(selectedProfile.code)}</span>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <div
                       className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ${styles.pillBg} ${styles.pillRing}`}
                     >
-                      <span className="text-[11px] uppercase tracking-[0.18em] text-zinc-200">
-                        MBTI
-                      </span>
-                      <span className="text-xs text-zinc-200">
-                        {selectedProfile.code}
+                      <span className="text-[10px] uppercase tracking-[0.15em] text-zinc-300">
+                        MBTI CODE
                       </span>
                     </div>
-                    <h2 className="text-xl font-semibold tracking-tight text-zinc-50 sm:text-2xl">
-                      {selectedProfile.name}
+                    <h2 className="font-serif text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
+                      {selectedProfile.code}
                     </h2>
+                    <p className="text-sm font-medium text-zinc-400">
+                      {selectedProfile.name}
+                    </p>
                   </div>
                 </div>
                 <button

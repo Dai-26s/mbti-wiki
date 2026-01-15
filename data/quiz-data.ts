@@ -129,6 +129,66 @@ export const quickQuestions: Question[] = [
     dimension: "SN",
     target: "second",
   },
+  {
+    id: 21,
+    text: "当参加一个有很多陌生人的活动时，我通常会主动找人搭话。",
+    dimension: "EI",
+    target: "first",
+  },
+  {
+    id: 22,
+    text: "如果周末没有安排，我更想在家安静做自己的事，而不是主动约很多局。",
+    dimension: "EI",
+    target: "second",
+  },
+  {
+    id: 23,
+    text: "当老板安排新项目时，我更想先弄清具体流程、时间和分工。",
+    dimension: "SN",
+    target: "first",
+  },
+  {
+    id: 24,
+    text: "当听到一个大胆的新点子时，我会立刻联想到它未来可能衍生出的各种可能。",
+    dimension: "SN",
+    target: "second",
+  },
+  {
+    id: 25,
+    text: "当朋友向我倾诉工作问题时，我会优先帮他分析利弊和解决方案。",
+    dimension: "TF",
+    target: "first",
+  },
+  {
+    id: 26,
+    text: "当同事在会议上被严厉批评时，即使对方确实有问题，我也会很在意他的感受。",
+    dimension: "TF",
+    target: "second",
+  },
+  {
+    id: 27,
+    text: "在出行前，我习惯提前订好酒店、路线和备选方案。",
+    dimension: "JP",
+    target: "first",
+  },
+  {
+    id: 28,
+    text: "如果旅途中遇到有趣的地方，我愿意临时改变原本的计划。",
+    dimension: "JP",
+    target: "second",
+  },
+  {
+    id: 29,
+    text: "在团队讨论方案时，即使有人情上有顾虑，我也会坚持选择更高效的做法。",
+    dimension: "TF",
+    target: "first",
+  },
+  {
+    id: 30,
+    text: "当事情还没有完全确定时，我不太愿意过早做死板的承诺。",
+    dimension: "JP",
+    target: "second",
+  },
 ];
 
 export const fullQuestions: Question[] = [
