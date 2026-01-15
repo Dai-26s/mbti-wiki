@@ -20,6 +20,8 @@ export default function Sidebar({
     { key: "gallery", label: "人格图鉴" },
   ];
 
+  const isLight = theme === "light";
+
   const logoBg =
     theme === "aurora"
       ? "bg-gradient-to-br from-indigo-500 via-sky-400 to-emerald-400"
@@ -35,7 +37,13 @@ export default function Sidebar({
         : "bg-zinc-200";
 
   return (
-    <aside className="flex h-full flex-col justify-between rounded-3xl border border-white/15 bg-white/10 bg-clip-padding p-6 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/70">
+    <aside
+      className={`flex h-full flex-col justify-between rounded-3xl bg-clip-padding p-6 shadow-2xl ${
+        isLight
+          ? "border border-zinc-200 bg-white/80"
+          : "border border-white/15 bg-white/10 backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-900/70"
+      }`}
+    >
       <div className="space-y-8">
         <div className="flex items-center gap-4">
           <div
@@ -44,8 +52,20 @@ export default function Sidebar({
             MB
           </div>
           <div className="space-y-1">
-            <div className="text-sm font-medium text-zinc-200">MBTI Wiki</div>
-            <div className="text-xs text-zinc-400">探索你的性格与潜力</div>
+            <div
+              className={`text-sm font-medium ${
+                isLight ? "text-zinc-900" : "text-zinc-200"
+              }`}
+            >
+              MBTI Wiki
+            </div>
+            <div
+              className={`text-xs ${
+                isLight ? "text-zinc-700" : "text-zinc-400"
+              }`}
+            >
+              探索你的性格与潜力
+            </div>
           </div>
         </div>
         <nav className="space-y-2">
@@ -63,9 +83,17 @@ export default function Sidebar({
               type="button"
               className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70 ${
                 item.key === activeView
-                  ? "bg-white/15 text-white"
-                  : "text-zinc-200 hover:bg-white/10 hover:text-white"
-              } ${item.disabled ? "cursor-not-allowed opacity-60 hover:bg-transparent" : ""}`}
+                  ? isLight
+                    ? "bg-zinc-900 text-zinc-50"
+                    : "bg-white/15 text-white"
+                  : isLight
+                    ? "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                    : "text-zinc-200 hover:bg-white/10 hover:text-white"
+              } ${
+                item.disabled
+                  ? "cursor-not-allowed opacity-60 hover:bg-transparent"
+                  : ""
+              }`}
             >
               <span>{item.label}</span>
               <span
@@ -75,15 +103,25 @@ export default function Sidebar({
           ))}
         </nav>
         <div className="pt-4">
-          <div className="mb-2 text-xs font-medium text-zinc-400">界面配色</div>
+          <div
+            className={`mb-2 text-xs font-medium ${
+              isLight ? "text-zinc-700" : "text-zinc-400"
+            }`}
+          >
+            界面配色
+          </div>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => onChangeTheme("aurora")}
               className={`flex flex-1 items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] transition ${
                 theme === "aurora"
-                  ? "border-white/40 bg-white/10 text-zinc-50"
-                  : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
+                  ? isLight
+                    ? "border-zinc-900 bg-zinc-900 text-zinc-50"
+                    : "border-white/40 bg-white/10 text-zinc-50"
+                  : isLight
+                    ? "border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100"
+                    : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
               }`}
             >
               <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-emerald-400" />
@@ -94,8 +132,12 @@ export default function Sidebar({
               onClick={() => onChangeTheme("sunset")}
               className={`flex flex-1 items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] transition ${
                 theme === "sunset"
-                  ? "border-white/40 bg-white/10 text-zinc-50"
-                  : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
+                  ? isLight
+                    ? "border-zinc-900 bg-zinc-900 text-zinc-50"
+                    : "border-white/40 bg-white/10 text-zinc-50"
+                  : isLight
+                    ? "border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100"
+                    : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
               }`}
             >
               <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-rose-500 to-amber-300" />
@@ -106,8 +148,12 @@ export default function Sidebar({
               onClick={() => onChangeTheme("mono")}
               className={`flex flex-1 items-center gap-2 rounded-2xl border px-3 py-2 text-[11px] transition ${
                 theme === "mono"
-                  ? "border-white/40 bg-white/10 text-zinc-50"
-                  : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
+                  ? isLight
+                    ? "border-zinc-900 bg-zinc-900 text-zinc-50"
+                    : "border-white/40 bg-white/10 text-zinc-50"
+                  : isLight
+                    ? "border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100"
+                    : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
               }`}
             >
               <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-br from-zinc-100 to-zinc-500" />
@@ -116,8 +162,20 @@ export default function Sidebar({
           </div>
         </div>
       </div>
-      <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-xs text-zinc-400">
-        <div className="font-medium text-zinc-300">小提示</div>
+      <div
+        className={`mt-6 rounded-2xl px-4 py-3 text-xs ${
+          isLight
+            ? "border border-zinc-200 bg-zinc-50 text-zinc-700"
+            : "border border-white/10 bg-black/20 text-zinc-400"
+        }`}
+      >
+        <div
+          className={`font-medium ${
+            isLight ? "text-zinc-900" : "text-zinc-300"
+          }`}
+        >
+          小提示
+        </div>
         <p className="mt-1 leading-relaxed">
           人格并非标签，而是理解自我与他人的窗口。
         </p>

@@ -126,14 +126,29 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
         </div>
       </div>
       <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-4 text-xs">
-        <span className="flex items-center gap-2 text-zinc-300">
+        <span
+          className={`flex items-center gap-2 ${
+            theme === "light" ? "text-zinc-700" : "text-zinc-300"
+          }`}
+        >
           <span className={`inline-flex h-1.5 w-1.5 rounded-full ${accentDot} group-hover:scale-125 transition-transform`} />
           查看详情
         </span>
         <div className="flex -space-x-2 opacity-0 transition-opacity group-hover:opacity-100">
-            {/* Tiny decoration or arrow could go here */}
-            <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              className={`w-4 h-4 ${
+                theme === "light" ? "text-zinc-600" : "text-zinc-400"
+              }`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
         </div>
       </div>

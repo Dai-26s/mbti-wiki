@@ -77,14 +77,14 @@ export default function Home() {
       pageBg: "bg-gradient-to-br from-zinc-50 via-zinc-50 to-zinc-100",
       pageText: "text-zinc-900",
       titleText: "text-zinc-900",
-      bodyText: "text-zinc-600",
+      bodyText: "text-zinc-700",
       accentDot: "bg-zinc-900",
       pillBg: "bg-zinc-100",
       pillRing: "ring-zinc-200",
       modalBg: "bg-white/95",
       modalText: "text-zinc-900",
       detailPrimaryText: "text-zinc-900",
-      detailSecondaryText: "text-zinc-600",
+      detailSecondaryText: "text-zinc-700",
     },
   };
 
@@ -117,7 +117,7 @@ export default function Home() {
       ];
     };
 
-    let list = [...mbtiProfiles];
+    const list = [...mbtiProfiles];
     list.sort((a, b) => {
       const sa = score(a.code);
       const sb = score(b.code);
@@ -203,14 +203,16 @@ export default function Home() {
               >
                 <header className="space-y-3">
                   <div
-                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ${styles.pillBg} ${styles.pillRing}`}
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ring-1 ${styles.pillBg} ${styles.pillRing} ${
+                      theme === "light" ? "text-zinc-800" : "text-zinc-200"
+                    }`}
                   >
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${styles.accentDot}`}
                     />
                     MBTI 人格图鉴
                   </div>
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <h1 className={`text-3xl font-semibold tracking-tight sm:text-4xl ${styles.titleText}`}>
                         认识 16 种人格，找到更适合自己的路
@@ -219,8 +221,16 @@ export default function Home() {
                         点击右侧卡片，查看每一种人格的核心特质、典型习惯、代表人物与成长建议。
                       </p>
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-zinc-300 sm:justify-end">
-                      <span className="mr-1 text-zinc-400">
+                    <div
+                      className={`mt-2 flex flex-wrap gap-2 text-[11px] sm:justify-end ${
+                        theme === "light" ? "text-zinc-700" : "text-zinc-300"
+                      }`}
+                    >
+                      <span
+                        className={`mr-1 ${
+                          theme === "light" ? "text-zinc-800" : "text-zinc-400"
+                        }`}
+                      >
                         筛选倾向：
                       </span>
                       {letterFilters.map((letter) => {
@@ -238,8 +248,12 @@ export default function Home() {
                             }
                             className={`rounded-full px-2.5 py-1 transition ${
                               active
-                                ? "bg-white/20 text-zinc-50"
-                                : "bg-white/5 text-zinc-300 hover:bg-white/10"
+                                ? theme === "light"
+                                  ? "bg-zinc-900 text-zinc-50"
+                                  : "bg-white/20 text-zinc-50"
+                                : theme === "light"
+                                  ? "bg-zinc-100 text-zinc-800 hover:bg-zinc-200"
+                                  : "bg-white/5 text-zinc-300 hover:bg-white/10"
                             }`}
                           >
                             {letter}
@@ -250,7 +264,11 @@ export default function Home() {
                         <button
                           type="button"
                           onClick={() => setActiveLetters([])}
-                          className="rounded-full px-2 py-1 text-[10px] text-zinc-400 underline-offset-2 hover:text-zinc-200 hover:underline"
+                          className={`rounded-full px-2 py-1 text-[10px] underline-offset-2 hover:underline ${
+                            theme === "light"
+                              ? "text-zinc-700 hover:text-zinc-900"
+                              : "text-zinc-400 hover:text-zinc-200"
+                          }`}
                         >
                           重置
                         </button>
@@ -283,6 +301,7 @@ export default function Home() {
                 <Quiz
                   onViewDetail={handleViewDetailFromQuiz}
                   onBackToGallery={() => setCurrentView("gallery")}
+                  theme={theme}
                 />
               </motion.div>
             )}
@@ -391,16 +410,30 @@ export default function Home() {
                   </div>
                   <div className="space-y-1">
                     <div
-                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium text-zinc-200 ring-1 ${styles.pillBg} ${styles.pillRing}`}
+                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ring-1 ${styles.pillBg} ${styles.pillRing} ${
+                        theme === "light" ? "text-zinc-800" : "text-zinc-200"
+                      }`}
                     >
-                      <span className="text-[10px] uppercase tracking-[0.15em] text-zinc-300">
+                      <span
+                        className={`text-[10px] uppercase tracking-[0.15em] ${
+                          theme === "light" ? "text-zinc-700" : "text-zinc-300"
+                        }`}
+                      >
                         MBTI CODE
                       </span>
                     </div>
-                    <h2 className="font-serif text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
+                    <h2
+                      className={`font-serif text-3xl font-bold tracking-tight sm:text-4xl ${
+                        theme === "light" ? "text-zinc-900" : "text-zinc-50"
+                      }`}
+                    >
                       {selectedProfile.code}
                     </h2>
-                    <p className="text-sm font-medium text-zinc-400">
+                    <p
+                      className={`text-sm font-medium ${
+                        theme === "light" ? "text-zinc-700" : "text-zinc-400"
+                      }`}
+                    >
                       {selectedProfile.name}
                     </p>
                   </div>
@@ -438,10 +471,18 @@ export default function Home() {
                   );
                 })()}
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-zinc-100">
+                  <h3
+                    className={`text-sm font-medium ${
+                      theme === "light" ? "text-zinc-900" : "text-zinc-100"
+                    }`}
+                  >
                     常见习惯
                   </h3>
-                  <ul className="space-y-1.5 text-sm text-zinc-300">
+                  <ul
+                    className={`space-y-1.5 text-sm ${
+                      theme === "light" ? "text-zinc-700" : "text-zinc-300"
+                    }`}
+                  >
                     {selectedProfile.habits.map((habit) => (
                       <li key={habit} className="flex gap-2">
                         <span
@@ -453,10 +494,18 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-zinc-100">
+                  <h3
+                    className={`text-sm font-medium ${
+                      theme === "light" ? "text-zinc-900" : "text-zinc-100"
+                    }`}
+                  >
                     代表人物
                   </h3>
-                  <ul className="space-y-1.5 text-sm text-zinc-300">
+                  <ul
+                    className={`space-y-1.5 text-sm ${
+                      theme === "light" ? "text-zinc-700" : "text-zinc-300"
+                    }`}
+                  >
                     {selectedProfile.representatives.map((rep) => (
                       <li key={rep} className="flex gap-2">
                         <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-violet-400" />
@@ -466,10 +515,18 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-zinc-100">
+                  <h3
+                    className={`text-sm font-medium ${
+                      theme === "light" ? "text-zinc-900" : "text-zinc-100"
+                    }`}
+                  >
                     成长建议
                   </h3>
-                  <ul className="space-y-1.5 text-sm text-zinc-300">
+                  <ul
+                    className={`space-y-1.5 text-sm ${
+                      theme === "light" ? "text-zinc-700" : "text-zinc-300"
+                    }`}
+                  >
                     {selectedProfile.suggestions.map((suggestion) => (
                       <li key={suggestion} className="flex gap-2">
                         <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-400" />
