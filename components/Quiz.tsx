@@ -4,7 +4,6 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import RadarChart from "./RadarChart";
-import QuestionIllustration from "./QuestionIllustration";
 import { mbtiProfiles, type MbtiProfile } from "../data/mbti";
 import { quickQuestions, fullQuestions, type Question } from "../data/quiz-data";
 
@@ -410,9 +409,7 @@ export default function Quiz({ onViewDetail, onBackToGallery, theme }: QuizProps
               exit={{ x: direction > 0 ? -40 : 40, opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 30 }}
             >
-              <div className="md:grid md:grid-cols-12 md:gap-8">
-                <div className="md:col-span-7">
-                  <div className="space-y-3">
+              <div className="space-y-3">
                     <div
                       className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.16em] ring-1 ${
                         isLight
@@ -436,8 +433,8 @@ export default function Quiz({ onViewDetail, onBackToGallery, theme }: QuizProps
                     >
                   请对上述陈述的同意程度作答，并根据你的真实反应选择。
                     </p>
-                  </div>
-                  <div className="mt-8 space-y-4">
+              </div>
+              <div className="mt-8 space-y-4">
                     <div className="grid gap-2 sm:grid-cols-5">
                       {scaleOptions.map((option) => {
                         const selected = answers[currentIndex] === option.value;
@@ -484,14 +481,6 @@ export default function Quiz({ onViewDetail, onBackToGallery, theme }: QuizProps
                         已选择的选项会保留，可随时返回修改
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="mt-10 md:mt-0 md:col-span-5">
-                  <QuestionIllustration
-                    question={currentQuestion}
-                    theme={theme}
-                  />
-                </div>
               </div>
             </motion.div>
           )}
