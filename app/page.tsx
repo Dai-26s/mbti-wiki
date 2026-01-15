@@ -7,7 +7,7 @@ import MbtiCard from "../components/MbtiCard";
 import { mbtiProfiles, type MbtiProfile } from "../data/mbti";
 import Quiz from "../components/Quiz";
 
-type AppTheme = "aurora" | "sunset" | "mono";
+type AppTheme = "aurora" | "sunset" | "mono" | "light";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<"gallery" | "quiz">("gallery");
@@ -15,39 +15,76 @@ export default function Home() {
   const [selectedProfile, setSelectedProfile] = useState<MbtiProfile | null>(
     null,
   );
-  const [theme, setTheme] = useState<AppTheme>("aurora");
+  const [theme, setTheme] = useState<AppTheme>("light");
   const [activeLetters, setActiveLetters] = useState<string[]>([]);
 
   const themeConfig: Record<
     AppTheme,
     {
       pageBg: string;
+      pageText: string;
+      titleText: string;
+      bodyText: string;
       accentDot: string;
       pillBg: string;
       pillRing: string;
       modalBg: string;
+      modalText: string;
+      detailPrimaryText: string;
+      detailSecondaryText: string;
     }
   > = {
     aurora: {
       pageBg: "bg-gradient-to-br from-zinc-950 via-zinc-900 to-slate-900",
+      pageText: "text-zinc-50",
+      titleText: "text-zinc-50",
+      bodyText: "text-zinc-300",
       accentDot: "bg-gradient-to-tr from-sky-400 to-emerald-400",
       pillBg: "bg-white/5",
       pillRing: "ring-white/15",
       modalBg: "bg-zinc-950/90",
+      modalText: "text-zinc-50",
+      detailPrimaryText: "text-zinc-100",
+      detailSecondaryText: "text-zinc-300",
     },
     sunset: {
       pageBg: "bg-gradient-to-br from-slate-950 via-violet-950 to-rose-900",
+      pageText: "text-zinc-50",
+      titleText: "text-zinc-50",
+      bodyText: "text-zinc-300",
       accentDot: "bg-gradient-to-tr from-rose-400 to-amber-300",
       pillBg: "bg-white/5",
       pillRing: "ring-white/20",
       modalBg: "bg-slate-950/90",
+      modalText: "text-zinc-50",
+      detailPrimaryText: "text-zinc-100",
+      detailSecondaryText: "text-zinc-300",
     },
     mono: {
       pageBg: "bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800",
+      pageText: "text-zinc-50",
+      titleText: "text-zinc-50",
+      bodyText: "text-zinc-300",
       accentDot: "bg-zinc-200",
       pillBg: "bg-white/5",
       pillRing: "ring-white/10",
       modalBg: "bg-zinc-950/95",
+      modalText: "text-zinc-50",
+      detailPrimaryText: "text-zinc-100",
+      detailSecondaryText: "text-zinc-300",
+    },
+    light: {
+      pageBg: "bg-white",
+      pageText: "text-zinc-900",
+      titleText: "text-zinc-900",
+      bodyText: "text-zinc-600",
+      accentDot: "bg-zinc-900",
+      pillBg: "bg-zinc-100",
+      pillRing: "ring-zinc-200",
+      modalBg: "bg-white/95",
+      modalText: "text-zinc-900",
+      detailPrimaryText: "text-zinc-900",
+      detailSecondaryText: "text-zinc-600",
     },
   };
 
@@ -143,7 +180,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen ${styles.pageBg} text-zinc-50`}>
+    <div className={`min-h-screen ${styles.pageBg} ${styles.pageText}`}>
       <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 md:gap-10 md:px-8 md:py-10 lg:py-12">
         <div className="sticky top-6 hidden h-[calc(100vh-3rem)] w-72 shrink-0 md:block">
           <Sidebar
@@ -175,10 +212,10 @@ export default function Home() {
                   </div>
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <h1 className="text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">
+                      <h1 className={`text-3xl font-semibold tracking-tight sm:text-4xl ${styles.titleText}`}>
                         认识 16 种人格，找到更适合自己的路
                       </h1>
-                      <p className="mt-2 max-w-xl text-sm text-zinc-300">
+                      <p className={`mt-2 max-w-xl text-sm ${styles.bodyText}`}>
                         点击右侧卡片，查看每一种人格的核心特质、典型习惯、代表人物与成长建议。
                       </p>
                     </div>
@@ -340,7 +377,7 @@ export default function Home() {
             onClick={handleClose}
           >
             <motion.div
-              className={`relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-white/15 p-6 text-zinc-50 shadow-2xl sm:p-8 ${styles.modalBg}`}
+              className={`relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-white/15 p-6 shadow-2xl sm:p-8 ${styles.modalBg} ${styles.modalText}`}
               initial={{ y: 40, scale: 0.96, opacity: 0 }}
               animate={{ y: 0, scale: 1, opacity: 1 }}
               exit={{ y: 40, scale: 0.96, opacity: 0 }}
@@ -386,13 +423,13 @@ export default function Home() {
                   }
                   return (
                     <div className="space-y-2">
-                      <p className="text-[13px] leading-relaxed text-zinc-100">
+                      <p className={`text-[13px] leading-relaxed ${styles.detailPrimaryText}`}>
                         {parts[0]}。
                       </p>
                       {parts.slice(1).map((part) => (
                         <p
                           key={part}
-                          className="text-xs leading-relaxed text-zinc-300"
+                          className={`text-xs leading-relaxed ${styles.detailSecondaryText}`}
                         >
                           {part}。
                         </p>

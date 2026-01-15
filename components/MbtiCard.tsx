@@ -6,7 +6,7 @@ import type { MbtiProfile } from "../data/mbti";
 interface MbtiCardProps {
   profile: MbtiProfile;
   onClick: () => void;
-  theme: "aurora" | "sunset" | "mono";
+  theme: "aurora" | "sunset" | "mono" | "light";
 }
 
 const getAvatarEmoji = (code: string) => {
@@ -72,6 +72,10 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
             : temperamentKey === "SJ"
               ? "border-zinc-200/25 bg-gradient-to-br from-zinc-950/90 via-zinc-900/80 to-zinc-900/70"
               : "border-amber-100/25 bg-gradient-to-br from-zinc-950/90 via-zinc-900/80 to-zinc-900/70";
+  const finalCardStyle =
+    theme === "light"
+      ? "border-zinc-200 bg-white/70"
+      : cardStyle;
 
   const repsColor =
     profile.code[2] === "T"
@@ -96,21 +100,21 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
       onClick={onClick}
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className={`group relative flex h-full flex-col justify-between rounded-[2rem] border bg-clip-padding p-6 md:p-7 text-left shadow-xl backdrop-blur-2xl transition ${cardStyle} hover:brightness-110 hover:shadow-2xl hover:ring-1 hover:ring-white/30 overflow-hidden`}
+      className={`group relative flex h-full flex-col justify-between rounded-[2rem] border bg-clip-padding p-6 md:p-7 text-left shadow-xl backdrop-blur-2xl transition ${finalCardStyle} hover:brightness-110 hover:shadow-2xl hover:ring-1 hover:ring-white/30 overflow-hidden`}
     >
       <div className={`absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl ${codeTintMap[profile.code]} opacity-30`} />
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <div className="relative z-10 flex flex-col pr-20 md:pr-24">
             <h3
-              className="font-serif text-3xl md:text-4xl font-semibold tracking-tight text-white"
+              className={`font-serif text-3xl md:text-4xl font-semibold tracking-tight ${theme === "light" ? "text-zinc-900" : "text-white"}`}
             >
               {profile.code}
             </h3>
-            <p className="mt-1 text-sm font-medium text-zinc-200/80">
+            <p className={`mt-1 text-sm font-medium ${theme === "light" ? "text-zinc-700" : "text-zinc-200/80"}`}>
               {profile.name}
             </p>
-            <p className={`mt-1 text-xs ${repsColor}`}>
+            <p className={`mt-1 text-xs ${theme === "light" ? "text-zinc-600" : repsColor}`}>
               {reps}
             </p>
           </div>

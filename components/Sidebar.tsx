@@ -1,5 +1,5 @@
 type SidebarView = "gallery" | "quiz";
-type AppTheme = "aurora" | "sunset" | "mono";
+type AppTheme = "aurora" | "sunset" | "mono" | "light";
 
 interface SidebarProps {
   activeView: SidebarView;
