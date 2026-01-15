@@ -26,6 +26,58 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
       : theme === "sunset"
         ? "bg-gradient-to-tr from-rose-400 to-amber-300"
         : "bg-zinc-200";
+
+  const temperamentKey = `${profile.code[1]}${profile.code[2]}`;
+
+  const cardStyle =
+    theme === "aurora"
+      ? temperamentKey === "NT"
+        ? "border-sky-400/40 bg-gradient-to-br from-slate-950/80 via-sky-950/60 to-emerald-900/40"
+        : temperamentKey === "NF"
+          ? "border-violet-400/40 bg-gradient-to-br from-slate-950/80 via-violet-950/60 to-fuchsia-900/40"
+          : temperamentKey === "SJ"
+            ? "border-emerald-300/35 bg-gradient-to-br from-slate-950/80 via-emerald-950/60 to-teal-900/40"
+            : "border-amber-300/40 bg-gradient-to-br from-slate-950/80 via-amber-950/60 to-rose-900/40"
+      : theme === "sunset"
+        ? temperamentKey === "NT"
+          ? "border-sky-300/40 bg-gradient-to-br from-slate-950/80 via-indigo-950/60 to-sky-900/40"
+          : temperamentKey === "NF"
+            ? "border-rose-300/40 bg-gradient-to-br from-slate-950/80 via-rose-950/60 to-fuchsia-900/40"
+            : temperamentKey === "SJ"
+              ? "border-amber-300/40 bg-gradient-to-br from-slate-950/80 via-amber-950/60 to-orange-900/40"
+              : "border-emerald-300/40 bg-gradient-to-br from-slate-950/80 via-emerald-950/60 to-teal-900/40"
+        : temperamentKey === "NT"
+          ? "border-sky-200/40 bg-gradient-to-br from-zinc-950/90 via-slate-900/80 to-sky-900/40"
+          : temperamentKey === "NF"
+            ? "border-violet-200/40 bg-gradient-to-br from-zinc-950/90 via-slate-900/80 to-violet-900/40"
+            : temperamentKey === "SJ"
+              ? "border-zinc-200/40 bg-gradient-to-br from-zinc-950/90 via-slate-900/80 to-emerald-900/40"
+              : "border-amber-200/40 bg-gradient-to-br from-zinc-950/90 via-slate-900/80 to-amber-900/40";
+
+  const codeGradient = (() => {
+    const e = profile.code[0];
+    const nOrS = profile.code[1];
+    const tOrF = profile.code[2];
+    if (e === "E" && tOrF === "T") {
+      return "bg-gradient-to-r from-amber-300 via-orange-300 to-sky-300";
+    }
+    if (e === "E" && tOrF === "F") {
+      return "bg-gradient-to-r from-rose-300 via-pink-300 to-amber-300";
+    }
+    if (e === "I" && nOrS === "N") {
+      return "bg-gradient-to-r from-violet-300 via-indigo-300 to-sky-300";
+    }
+    return "bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300";
+  })();
+
+  const repsColor =
+    profile.code[2] === "T"
+      ? theme === "sunset"
+        ? "text-sky-300"
+        : "text-cyan-300"
+      : theme === "sunset"
+        ? "text-fuchsia-300"
+        : "text-violet-300";
  
   const emoji = getAvatarEmoji(profile.code);
   const reps =
@@ -39,18 +91,20 @@ export default function MbtiCard({ profile, onClick, theme }: MbtiCardProps) {
       onClick={onClick}
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="group relative flex h-full flex-col justify-between rounded-[2rem] border border-white/10 bg-white/5 bg-clip-padding p-6 text-left shadow-xl backdrop-blur-2xl transition hover:border-white/20 hover:bg-white/10"
+      className={`group relative flex h-full flex-col justify-between rounded-[2rem] border bg-clip-padding p-6 text-left shadow-xl backdrop-blur-2xl transition ${cardStyle} hover:brightness-110`}
     >
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <div className="flex flex-col">
-            <h3 className="font-serif text-3xl font-semibold tracking-tight text-zinc-50">
+            <h3
+              className={`font-serif text-3xl font-semibold tracking-tight text-transparent ${codeGradient} bg-clip-text`}
+            >
               {profile.code}
             </h3>
-            <p className="mt-1 text-sm font-medium text-zinc-300">
+            <p className="mt-1 text-sm font-medium text-zinc-100">
               {profile.name}
             </p>
-            <p className="mt-1 text-xs text-emerald-300">
+            <p className={`mt-1 text-xs ${repsColor}`}>
               {reps}
             </p>
           </div>
