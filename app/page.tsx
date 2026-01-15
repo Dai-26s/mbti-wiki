@@ -11,6 +11,7 @@ type AppTheme = "aurora" | "sunset" | "mono";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<"gallery" | "quiz">("gallery");
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<MbtiProfile | null>(
     null,
   );
@@ -185,8 +186,56 @@ export default function Home() {
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             <span>人格测评</span>
           </button>
+          <div className="w-3" />
+          <button
+            type="button"
+            onClick={() => setShowMobileMenu(true)}
+            className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/5 px-3 py-2 text-sm text-zinc-300 ring-1 ring-white/10 transition hover:bg-white/10 hover:text-white"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <span>更多</span>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {showMobileMenu && (
+          <motion.div
+            className="fixed inset-0 z-50 flex flex-col bg-zinc-950/95 backdrop-blur-xl md:hidden"
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+          >
+            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+                <span className="text-lg font-semibold text-zinc-50">菜单 & 设置</span>
+                <button 
+                    onClick={() => setShowMobileMenu(false)}
+                    className="rounded-full bg-white/10 p-2 text-zinc-300 transition hover:bg-white/20 hover:text-white"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+                <Sidebar
+                    activeView={currentView}
+                    onChangeView={(view) => {
+                        setCurrentView(view);
+                        setShowMobileMenu(false);
+                    }}
+                    theme={theme}
+                    onChangeTheme={setTheme}
+                />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {selectedProfile && (
           <motion.div

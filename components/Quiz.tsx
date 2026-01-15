@@ -122,6 +122,8 @@ export default function Quiz({ onViewDetail, onBackToGallery }: QuizProps) {
   const [direction, setDirection] = useState(1);
   const [result, setResult] = useState<QuizResult | null>(null);
 
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   const startQuiz = (mode: "quick" | "full") => {
     setQuizMode(mode);
     setQuestions(mode === "quick" ? quickQuestions : fullQuestions);
@@ -129,6 +131,7 @@ export default function Quiz({ onViewDetail, onBackToGallery }: QuizProps) {
     setAnswers([]);
     setResult(null);
     setDirection(1);
+    setIsTransitioning(false);
   };
 
   const isCompleted = useMemo(() => result !== null, [result]);
@@ -140,24 +143,31 @@ export default function Quiz({ onViewDetail, onBackToGallery }: QuizProps) {
       : 0;
 
   const handleSelect = (value: number) => {
-    if (isCompleted) {
+    if (isCompleted || isTransitioning) {
       return;
     }
+    
+    // Optimistic update for visual feedback
     const nextAnswers = [...answers];
     nextAnswers[currentIndex] = value;
     setAnswers(nextAnswers);
+    setIsTransitioning(true);
 
-    if (currentIndex === questions.length - 1) {
-      const computed = calculateResult(nextAnswers, questions);
-      setResult(computed);
-    } else {
-      setDirection(1);
-      setCurrentIndex((index) => index + 1);
-    }
+    // Delay for 400ms to show the selected effect
+    setTimeout(() => {
+        if (currentIndex === questions.length - 1) {
+            const computed = calculateResult(nextAnswers, questions);
+            setResult(computed);
+        } else {
+            setDirection(1);
+            setCurrentIndex((index) => index + 1);
+        }
+        setIsTransitioning(false);
+    }, 400);
   };
 
   const handlePrev = () => {
-    if (isCompleted) {
+    if (isCompleted || isTransitioning) {
       return;
     }
     if (currentIndex === 0) {
